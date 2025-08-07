@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Users - SantriKoding.com</title>
+    <title>Data Pengguna</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body style="background: lightgray">
@@ -13,21 +13,20 @@
         <div class="row">
             <div class="col-md-12">
                 <div>
-                    <h3 class="text-center my-4">Data Users</h3>
-                    <h5 class="text-center"><a href="https://santrikoding.com">www.santrikoding.com</a></h5>
+                    <h3 class="text-center my-4">Data Pengguna</h3>
                     <hr>
                 </div>
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
-                        <a href="{{ route('users.create') }}" class="btn btn-md btn-success mb-3">ADD USER</a>
+                        <a href="{{ route('users.create') }}" class="btn btn-md btn-success mb-3">TAMBAH PENGGUNA</a>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">NAME</th>
+                                    <th scope="col">NAMA</th>
                                     <th scope="col">EMAIL</th>
                                     <th scope="col">ROLE</th>
-                                    <th scope="col">CREATED AT</th>
-                                    <th scope="col" style="width: 20%">ACTIONS</th>
+                                    <th scope="col">DIBUAT</th>
+                                    <th scope="col" style="width: 20%">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,9 +37,9 @@
                                         <td>{{ ucfirst($user->role) }}</td>
                                         <td>{{ $user->created_at->format('d M Y') }}</td>
                                         <td class="text-center">
-                                            <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('users.destroy', $user->id) }}" method="POST">
-                                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                            <form onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-dark">LIHAT</a>
+                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary">UBAH</a>
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
@@ -51,7 +50,7 @@
                                     <tr>
                                         <td colspan="5" class="text-center">
                                             <div class="alert alert-danger">
-                                                Data User belum ada.
+                                                Belum ada data pengguna.
                                             </div>
                                         </td>
                                     </tr>

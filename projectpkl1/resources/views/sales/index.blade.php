@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Sales - SantriKoding.com</title>
+    <title>Data Penjualan - Laravel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body style="background: lightgray">
@@ -13,29 +13,29 @@
         <div class="row">
             <div class="col-md-12">
                 <div>
-                    <h3 class="text-center my-4">Tutorial Laravel 12 untuk Pemula</h3>
-                    <h5 class="text-center"><a href="https://santrikoding.com">www.santrikoding.com</a></h5>
+                    <h3 class="text-center my-4">Data Penjualan</h3>
+                    <h5 class="text-center"><a href="#"></a></h5>
                     <hr>
                 </div>
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
-                        <a href="{{ route('sales.create') }}" class="btn btn-md btn-success mb-3">ADD SALE</a>
+                        <a href="{{ route('sales.create') }}" class="btn btn-md btn-success mb-3">TAMBAH PENJUALAN</a>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">USER</th>
-                                    <th scope="col">SALE DATE</th>
-                                    <th scope="col">TOTAL AMOUNT</th>
-                                    <th scope="col">PAYMENT METHOD</th>
-                                    <th scope="col" style="width: 20%">ACTIONS</th>
+                                    <th scope="col">NAMA USER</th>
+                                    <th scope="col">TANGGAL</th>
+                                    <th scope="col">TOTAL</th>
+                                    <th scope="col">METODE BAYAR</th>
+                                    <th scope="col" style="width: 20%">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($sales as $sale)
                                     <tr>
-                                        <td>{{ $sale->user->name ?? 'N/A' }}</td>
-                                        <td>{{ $sale->sale_date->format('d-m-Y') }}</td>
-                                        <td>{{ "Rp " . number_format($sale->total_amount, 2, ',', '.') }}</td>
+                                        <td>{{ $sale->user->name }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($sale->sale_date)->translatedFormat('d F Y') }}</td>
+                                        <td>Rp {{ number_format($sale->total_amount, 2, ',', '.') }}</td>
                                         <td>{{ ucfirst($sale->payment_method) }}</td>
                                         <td class="text-center">
                                             <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('sales.destroy', $sale->id) }}" method="POST">
@@ -49,15 +49,16 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5">
-                                            <div class="alert alert-danger text-center mb-0">
-                                                Data Sales belum ada.
+                                        <td colspan="5" class="text-center">
+                                            <div class="alert alert-danger">
+                                                Data Penjualan belum ada.
                                             </div>
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
+
                         {{ $sales->links() }}
                     </div>
                 </div>
@@ -69,7 +70,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // message with sweetalert
         @if(session('success'))
             Swal.fire({
                 icon: "success",
