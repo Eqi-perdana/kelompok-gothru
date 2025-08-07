@@ -17,6 +17,7 @@
                         <form action="{{ route('users.store') }}" method="POST">
                             @csrf
 
+                            <!-- NAME -->
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">NAME</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama">
@@ -25,6 +26,7 @@
                                 @enderror
                             </div>
 
+                            <!-- EMAIL -->
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">EMAIL</label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Masukkan Email">
@@ -33,6 +35,7 @@
                                 @enderror
                             </div>
 
+                            <!-- PASSWORD -->
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">PASSWORD</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Masukkan Password">
@@ -41,6 +44,16 @@
                                 @enderror
                             </div>
 
+                            <!-- KONFIRMASI PASSWORD -->
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">KONFIRMASI PASSWORD</label>
+                                <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" placeholder="Ulangi Password">
+                                @error('password_confirmation')
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- ROLE -->
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">ROLE</label>
                                 <select name="role" class="form-control @error('role') is-invalid @enderror">
@@ -53,6 +66,7 @@
                                 @enderror
                             </div>
 
+                            <!-- BUTTONS -->
                             <button type="submit" class="btn btn-md btn-primary me-3">SAVE</button>
                             <button type="reset" class="btn btn-md btn-warning">RESET</button>
                         </form> 
