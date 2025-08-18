@@ -5,13 +5,12 @@ use Illuminate\Support\Facades\Route;
 // Import controller yang sudah ada
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SaleController;
-
-// Import controller baru
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemController;
+use App\Http\Controllers\SaleItemController; // <-- tambahin ini
 
 /*
 |--------------------------------------------------------------------------
@@ -24,14 +23,15 @@ use App\Http\Controllers\PurchaseItemController;
 |
 */
 
-// Route resource untuk users, sales, categories, products, suppliers, purchases, dan purchase_items
+// Route resource untuk semua entitas
 Route::resource('users', UserController::class);
 Route::resource('sales', SaleController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('products', ProductController::class);
 Route::resource('suppliers', SupplierController::class);
 Route::resource('purchases', PurchaseController::class);
-Route::resource('purchase-items', PurchaseItemController::class); // <--- ditambahkan
+Route::resource('purchase_items', PurchaseItemController::class);
+Route::resource('sale_items', SaleItemController::class); // <-- tambahin ini
 
 // Route default (halaman utama)
 Route::get('/', function () {

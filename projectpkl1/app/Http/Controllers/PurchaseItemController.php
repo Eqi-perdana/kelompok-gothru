@@ -2,96 +2,68 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PurchaseItem;
-use App\Models\Product;
-use App\Models\Purchase;
-use Illuminate\Http\Request;
+// Import model Product
+use App\Models\Product; 
+
+// Import return type View
 use Illuminate\View\View;
+
+// Import return type RedirectResponse
 use Illuminate\Http\RedirectResponse;
+
+// Import Request
+use Illuminate\Http\Request;
 
 class PurchaseItemController extends Controller
 {
     /**
-     * Menampilkan semua purchase items
+     * Menampilkan daftar produk
      */
     public function index(): View
     {
-        $items = PurchaseItem::with(['product', 'purchase'])
-            ->latest()
-            ->paginate(10);
+        // Ambil semua data produk, urutkan dari terbaru
+        $produk = Product::latest()->paginate(10);
 
-        return view('purchase_items.index', compact('items'));
+        // Tampilkan view dengan data produk
+        return view('products.index', compact('produk'));
     }
 
     /**
-     * Form tambah purchase item
+     * Menampilkan form tambah produk
      */
     public function create(): View
     {
-        $products = Product::all();
-        $purchases = Purchase::all();
-
-        return view('purchase_items.create', compact('products', 'purchases'));
+        return view('products.create');
     }
 
     /**
-     * Simpan purchase item baru
+     * Menyimpan data produk baru
      */
     public function store(Request $request): RedirectResponse
     {
+        // Validasi form
         $request->validate([
-            'purchase_id' => 'required|exists:purchases,id',
-            'product_id'  => 'required|exists:products,id',
-            'quantity'    => 'required|numeric|min:1',
-            'price'       => 'required|numeric|min:0'
+            'image'       => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'title'       => 'required|min:5',
+            'description' => 'required|min:10',
+            'price'       => 'required|numeric',
+            'stock'       => 'required|numeric'
         ]);
 
-        PurchaseItem::create($request->all());
+        // Upload gambar
+        $gambar = $request->file('image');
+        $gambar->storeAs('products', $gambar->hashName());
 
-        return redirect()->route('purchase-items.index')
-            ->with('success', 'Purchase item berhasil ditambahkan!');
-    }
-
-    /**
-     * Form edit purchase item
-     */
-    public function edit($id): View
-    {
-        $item = PurchaseItem::findOrFail($id);
-        $products = Product::all();
-        $purchases = Purchase::all();
-
-        return view('purchase_items.edit', compact('item', 'products', 'purchases'));
-    }
-
-    /**
-     * Update purchase item
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        $request->validate([
-            'purchase_id' => 'required|exists:purchases,id',
-            'product_id'  => 'required|exists:products,id',
-            'quantity'    => 'required|numeric|min:1',
-            'price'       => 'required|numeric|min:0'
+        // Simpan ke database
+        Product::create([
+            'image'       => $gambar->hashName(),
+            'title'       => $request->title,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'stock'       => $request->stock
         ]);
 
-        $item = PurchaseItem::findOrFail($id);
-        $item->update($request->all());
-
-        return redirect()->route('purchase-items.index')
-            ->with('success', 'Purchase item berhasil diperbarui!');
-    }
-
-    /**
-     * Hapus purchase item
-     */
-    public function destroy($id): RedirectResponse
-    {
-        $item = PurchaseItem::findOrFail($id);
-        $item->delete();
-
-        return redirect()->route('purchase-items.index')
-            ->with('success', 'Purchase item berhasil dihapus!');
+        // Redirect dengan pesan sukses
+        return redirect()->route('products.index')->with(['success' => 'Data produk berhasil disimpan!']);
     }
 }

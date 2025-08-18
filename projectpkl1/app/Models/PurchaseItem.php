@@ -9,11 +9,6 @@ class PurchaseItem extends Model
 {
     use HasFactory;
 
-    /**
-     * fillable
-     *
-     * @var array
-     */
     protected $fillable = [
         'purchase_id',
         'product_id',
@@ -22,17 +17,11 @@ class PurchaseItem extends Model
         'subtotal',
     ];
 
-    /**
-     * Relasi ke Purchase
-     */
     public function purchase()
     {
         return $this->belongsTo(Purchase::class);
     }
 
-    /**
-     * Relasi ke Product
-     */
     public function product()
     {
         return $this->belongsTo(Product::class);
