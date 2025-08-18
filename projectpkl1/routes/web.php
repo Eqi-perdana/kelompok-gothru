@@ -10,18 +10,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemController;
-use App\Http\Controllers\SaleItemController; // <-- tambahin ini
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Di sini kita mendefinisikan semua route web untuk aplikasi.
-| Route resource akan otomatis membuat semua route CRUD
-| untuk controller yang bersangkutan.
-|
-*/
+use App\Http\Controllers\SaleItemController;
+use App\Http\Controllers\ProductPriceHistoryController; // <-- tambah ini
 
 // Route resource untuk semua entitas
 Route::resource('users', UserController::class);
@@ -31,7 +21,8 @@ Route::resource('products', ProductController::class);
 Route::resource('suppliers', SupplierController::class);
 Route::resource('purchases', PurchaseController::class);
 Route::resource('purchase_items', PurchaseItemController::class);
-Route::resource('sale_items', SaleItemController::class); // <-- tambahin ini
+Route::resource('sale_items', SaleItemController::class);
+Route::resource('product_price_history', ProductPriceHistoryController::class); // <-- tambah ini
 
 // Route default (halaman utama)
 Route::get('/', function () {

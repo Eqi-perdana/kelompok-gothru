@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Sale Item</title>
+    <title>Tambah Item Penjualan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body style="background: lightgray">
@@ -13,9 +13,8 @@
         <div class="col-md-8 offset-md-2">
             <div class="card border-0 shadow-sm rounded">
                 <div class="card-body">
-                    <h4 class="mb-4">Tambah Sale Item</h4>
+                    <h4 class="mb-4">Tambah Item Penjualan</h4>
 
-                    {{-- Menampilkan error validasi --}}
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">
@@ -28,52 +27,63 @@
 
                     <form action="{{ route('sale_items.store') }}" method="POST">
                         @csrf
-                        
-                        {{-- Pilih Sale --}}
+
+                        <!-- Pilih Penjualan -->
                         <div class="mb-3">
-                            <label class="form-label">Sale</label>
-                            <select class="form-control" name="sale_id" required>
-                                <option value="">-- Pilih Sale --</option>
+                            <label class="form-label">Penjualan</label>
+                            <select class="form-control @error('sale_id') is-invalid @enderror" name="sale_id" required>
+                                <option value="">-- Pilih Penjualan --</option>
                                 @foreach ($sales as $sale)
                                     <option value="{{ $sale->id }}">
-                                        SALE-{{ $sale->id }} | {{ \Carbon\Carbon::parse($sale->sale_date)->translatedFormat('d F Y') }}
+                                        Penjualan #{{ $sale->id }} - {{ \Carbon\Carbon::parse($sale->sale_date)->format('Y-m-d') }}
                                     </option>
                                 @endforeach
                             </select>
+                            @error('sale_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Pilih Produk --}}
+                        <!-- Pilih Produk -->
                         <div class="mb-3">
                             <label class="form-label">Produk</label>
-                            <select class="form-control" name="product_id" required>
+                            <select class="form-control @error('product_id') is-invalid @enderror" name="product_id" required>
                                 <option value="">-- Pilih Produk --</option>
                                 @foreach ($products as $product)
-                                    <option value="{{ $product->id }}">
-                                        {{ $product->name }}
-                                    </option>
+                                    <option value="{{ $product->id }}">{{ $product->name }} (Stok: {{ $product->stock }})</option>
                                 @endforeach
                             </select>
+                            @error('product_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Quantity --}}
+                        <!-- Jumlah -->
                         <div class="mb-3">
                             <label class="form-label">Jumlah</label>
-                            <input type="number" class="form-control" name="quantity" id="quantity" min="1" required>
+                            <input type="number" class="form-control @error('quantity') is-invalid @enderror" name="quantity" min="1" required>
+                            @error('quantity')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Price --}}
+                        <!-- Harga -->
                         <div class="mb-3">
                             <label class="form-label">Harga</label>
-                            <input type="number" step="0.01" class="form-control" name="price" id="price" min="0" required>
+                            <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" name="price" required>
+                            @error('price')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Subtotal (otomatis) --}}
+                        <!-- Subtotal (otomatis dihitung) -->
                         <div class="mb-3">
                             <label class="form-label">Subtotal</label>
-                            <input type="number" step="0.01" class="form-control" name="subtotal" id="subtotal" readonly>
+                            <input type="number" step="0.01" class="form-control" name="subtotal" readonly>
                         </div>
 
                         <button type="submit" class="btn btn-success">SIMPAN</button>
+                        <button type="reset" class="btn btn-warning">RESET</button>
                         <a href="{{ route('sale_items.index') }}" class="btn btn-secondary">KEMBALI</a>
                     </form>
 
@@ -84,12 +94,18 @@
 </div>
 
 <script>
-    // hitung subtotal otomatis
-    document.addEventListener("input", function() {
-        let qty = parseFloat(document.getElementById("quantity").value) || 0;
-        let price = parseFloat(document.getElementById("price").value) || 0;
-        document.getElementById("subtotal").value = qty * price;
-    });
+    const quantityInput = document.querySelector('input[name="quantity"]');
+    const priceInput = document.querySelector('input[name="price"]');
+    const subtotalInput = document.querySelector('input[name="subtotal"]');
+
+    function updateSubtotal() {
+        const quantity = parseFloat(quantityInput.value) || 0;
+        const price = parseFloat(priceInput.value) || 0;
+        subtotalInput.value = (quantity * price).toFixed(2);
+    }
+
+    quantityInput.addEventListener('input', updateSubtotal);
+    priceInput.addEventListener('input', updateSubtotal);
 </script>
 
 </body>
